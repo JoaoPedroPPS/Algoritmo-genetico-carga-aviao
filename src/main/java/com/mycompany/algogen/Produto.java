@@ -4,11 +4,21 @@ import java.util.*;
 public class Produto {
     private String descricao;
     private double peso;
-    private double valor;
     private int largura;
     private int altura;
     private int profundidade;
 
+    public Produto(String descricao, double peso, double valor, int largura, int altura, int profundidade) {
+        this.descricao = descricao;
+        this.peso = peso;
+        this.largura = largura;
+        this.altura = altura;
+        this.profundidade = profundidade;
+    }
+
+    
+    
+    
     public Produto() {
     }
 
@@ -26,14 +36,6 @@ public class Produto {
 
     public void setPeso(double peso) {
         this.peso = peso;
-    }
-
-    public double getValor() {
-        return valor;
-    }
-
-    public void setValor(double valor) {
-        this.valor = valor;
     }
 
     public int getLargura() {
@@ -65,7 +67,6 @@ public class Produto {
         return "Produto{" +
                 "descricao='" + descricao + '\'' +
                 ", peso=" + peso +
-                ", valor=" + valor +
                 ", largura=" + largura +
                 ", altura=" + altura +
                 ", profundidade=" + profundidade +

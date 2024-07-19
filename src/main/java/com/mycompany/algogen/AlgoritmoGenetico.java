@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.mycompany.algogen;
 import java.io.*;
 import java.util.*;
@@ -35,7 +32,6 @@ public class AlgoritmoGenetico {
 
     public void executar() {
         this.criarPopulacao();
-        // Executar por gerações
         for (int i = 0; i < this.numeroGeracoes; i++) {
             System.out.println("Geração: " + i);
             mostraPopulacao();
@@ -62,7 +58,9 @@ public class AlgoritmoGenetico {
                 Produto novoProduto = new Produto();
                 novoProduto.setDescricao(produto[0]);
                 novoProduto.setPeso(Double.parseDouble(produto[1]));
-                novoProduto.setValor(Double.parseDouble(produto[2]));
+                novoProduto.setLargura(Integer.parseInt(produto[3]));
+                novoProduto.setAltura(Integer.parseInt(produto[4]));
+                novoProduto.setProfundidade(Integer.parseInt(produto[5]));
                 produtos.add(novoProduto);
                 System.out.println(novoProduto);
                 this.tamCromossomo++;
@@ -89,36 +87,26 @@ public class AlgoritmoGenetico {
             this.populacao.add(criarCromossomo());
     }
 
-    private double fitness(ArrayList<Integer> cromossomo) {
-        double pesoTotal = 0, larguraTotal = 0, alturaTotal = 0, profundidadeTotal = 0;
-        for (int i = 0; i < this.tamCromossomo; i++) {
+     private double fitness(ArrayList<Integer> cromossomo) {
+        double pesoTotal = 0;
+        double volumeTotal = 0;
+        boolean penalizacao = false;
+
+        for (int i = 0; i < this.tamPopulacao; i++) {
             if (cromossomo.get(i) == 1) {
-                pesoTotal += produtos.get(i).getPeso();
-                larguraTotal += produtos.get(i).getLargura();
-                alturaTotal += produtos.get(i).getAltura();
-                profundidadeTotal += produtos.get(i).getProfundidade();
+                Produto produto = produtos.get(i);
+                if (produto.getLargura() > this.larguraMaxima || produto.getAltura() > this.alturaMaxima || produto.getProfundidade() > this.profundidadeMaxima) {
+                    penalizacao = true;
+                }
+                pesoTotal += produto.getPeso();
+                volumeTotal += produto.getLargura() * produto.getAltura() * produto.getProfundidade();
             }
         }
 
-        // Verifica se excede as dimensões máximas
-        if (larguraTotal > larguraMaxima || alturaTotal > alturaMaxima || profundidadeTotal > profundidadeMaxima) {
-            return 0; // Penalização por exceder dimensões máximas
+        if (penalizacao || pesoTotal > this.capacidadePeso) {
+            return 0;
         }
-
-        // Verifica se excede a capacidade máxima de peso
-        if (pesoTotal > capacidadePeso) {
-            return 0; // Penalização por exceder capacidade de peso
-        }
-
-        // Calcula o fitness como o valor total dos produtos
-        double valorTotal = 0;
-        for (int i = 0; i < this.tamCromossomo; i++) {
-            if (cromossomo.get(i) == 1) {
-                valorTotal += produtos.get(i).getValor();
-            }
-        }
-
-        return valorTotal;
+        return volumeTotal;
     }
 
     private void gerarRoleta() {
@@ -235,18 +223,28 @@ public class AlgoritmoGenetico {
         return indiceMelhor;
     }
 
-    public void mostrarCarga(ArrayList<Integer> resultado) {
-        System.out.println("Avaliação do Melhor: " + this.fitness(resultado));
-        System.out.println("Produtos carregados no avião:");
-        for (int i = 0; i < resultado.size(); i++) {
-            int carrega = resultado.get(i);
-            if (carrega == 1) {
+   public void mostrarCarga(ArrayList<Integer> melhorCromossomo) {
+        System.out.println("Cargas selecionadas para o avião:");
+        double pesoTotal = 0;
+        double volumeTotal = 0;
+
+        for (int i = 0; i < tamPopulacao; i++) {
+            if (melhorCromossomo.get(i) == 1) {
                 Produto p = produtos.get(i);
-                System.out.println(p.getDescricao() +
-                        " Valor:" + p.getValor() + " Peso:" + p.getPeso() +
-                        " Largura:" + p.getLargura() + " Altura:" + p.getAltura() +
-                        " Profundidade:" + p.getProfundidade());
+                System.out.println("------------------------------------------------------------------");
+                System.out.println("Descrição: " + p.getDescricao());
+                System.out.println("Peso: " + p.getPeso());
+                System.out.println("Largura: " + p.getLargura());
+                System.out.println("Altura: " + p.getAltura());
+                System.out.println("Profundidade: " + p.getProfundidade());
+
+                pesoTotal += p.getPeso();
+                volumeTotal += p.getLargura() * p.getAltura() * p.getProfundidade();
             }
         }
+
+        System.out.println("\n\nPeso Total: " + pesoTotal );
+        System.out.println("\n\nVolume Total: " + volumeTotal );
     }
+
 }

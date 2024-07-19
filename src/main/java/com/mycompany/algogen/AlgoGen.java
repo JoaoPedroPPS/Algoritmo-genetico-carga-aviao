@@ -7,11 +7,11 @@ public class AlgoGen {
 
     public static void main(String[] args) {
         int populacao = 20;
-        double capacidadePeso = 8000; // Capacidade de peso em kg
-        int larguraMaxima = 300; // Largura máxima em cm
-        int alturaMaxima = 200; // Altura máxima em cm
-        int profundidadeMaxima = 150; // Profundidade máxima em cm
-        int probabilidadeMutacao = 5; // 5%
+        double capacidadePeso = 400; 
+        int larguraMaxima = 300; 
+        int alturaMaxima = 300; 
+        int profundidadeMaxima = 400; 
+        int probabilidadeMutacao = 5; 
         int qtdeCruzamentos = 5;
         int numeroGeracoes = 10;
         
@@ -20,7 +20,7 @@ public class AlgoGen {
                                                         probabilidadeMutacao, qtdeCruzamentos,
                                                         numeroGeracoes);
         
-        meuAg.carregaArquivo("dados.csv"); // Carregar os dados do arquivo CSV
-        meuAg.executar(); // Executar o algoritmo genético
+        meuAg.carregaArquivo("dados.csv"); 
+        meuAg.executar(); 
     }
 }
